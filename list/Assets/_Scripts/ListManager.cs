@@ -10,11 +10,9 @@ using UnityEngine.UI;
 
 public class ListManager : MonoBehaviour
 {
-    private const string NoPngInFile = "No png file in folder";
-    private const string CantFindCatalog = "Cant find catalog";
+
     
     private static string _folderPath = "C:/";
-    private string searchPattern = "*.png";
 
     [SerializeField] private GameObject cellContainer;
     [SerializeField] private Button refreshButton;
@@ -80,7 +78,7 @@ public class ListManager : MonoBehaviour
     {
         GetImagePathList();
 
-        if(_filePathList.Count == 0 && isPathCorrect) EnablePopup(NoPngInFile);
+        if(_filePathList.Count == 0 && isPathCorrect) EnablePopup(Constants.NoPngInFile);
 
         int newCellsToInstantiate = (_filePathList.Count > _cells.Count) ? _filePathList.Count - _cells.Count : 0;
         if(newCellsToInstantiate > 0) InstantiateCells(newCellsToInstantiate);
@@ -96,14 +94,14 @@ public class ListManager : MonoBehaviour
     {
         try
         {
-            _filePathList = Directory.GetFiles(_folderPath, searchPattern).ToList();
+            _filePathList = Directory.GetFiles(_folderPath, Constants.SearchPattern).ToList();
             DisablePopup();
             isPathCorrect = true;
         }
         catch (Exception e)
         {
             _filePathList.Clear();
-            EnablePopup(CantFindCatalog);
+            EnablePopup(Constants.CantFindCatalog);
             ResetList();
             isPathCorrect = false;
             Debug.Log(e.Message);

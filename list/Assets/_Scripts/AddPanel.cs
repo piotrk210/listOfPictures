@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,7 +12,7 @@ public class AddPanel : MonoBehaviour
     [SerializeField] private TMP_InputField input;
     [SerializeField] private Button submitButton;
     public Action OnAddPng;
-    private string fileFormat = ".png";
+
     
     private string catalogPath;
 
@@ -33,7 +34,8 @@ public class AddPanel : MonoBehaviour
 
     private void Submit()
     {
-        File.Create(catalogPath + "/"+ input.text + fileFormat);
+        var fileStream = File.Create(catalogPath + "/"+ input.text + Constants.FileFormat);
+        fileStream.Close();
         OnAddPng?.Invoke();
     }
 }
