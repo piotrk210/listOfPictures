@@ -11,6 +11,11 @@ public class Cell : MonoBehaviour
     [SerializeField] private TextMeshProUGUI fileNameText;
     [SerializeField] private TextMeshProUGUI creationTimeText;
     [SerializeField] private RawImage rawImage;
+    [SerializeField] private Texture2D texturePlaceholder;
+
+    private int textureWidth = 40;
+    private int textureHight = 40;
+    
     private DateTime _dateTime;
 
     public void UpdateCell(string path)
@@ -25,7 +30,7 @@ public class Cell : MonoBehaviour
     
     private Texture LoadTexture(string path)
     {
-        Texture2D texture = new Texture2D(40,40);
+        Texture2D texture = new Texture2D(textureWidth,textureHight);
         try
         {
             texture.LoadImage(File.ReadAllBytes(path));
@@ -33,6 +38,7 @@ public class Cell : MonoBehaviour
         catch (Exception e)
         {
             Debug.Log(e.Message);
+            texture = texturePlaceholder;
         }
         return texture;
     }

@@ -35,7 +35,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 226.20334, y: 0}
+  m_SizeDelta: {x: 200, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5425566774071114673
 CanvasRenderer:
@@ -168,7 +168,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 226.20334, y: 0}
+  m_SizeDelta: {x: 200, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7494225664199724765
 CanvasRenderer:
@@ -360,6 +360,7 @@ MonoBehaviour:
   fileNameText: {fileID: 7502317001336581236}
   creationTimeText: {fileID: 4689870363089011515}
   rawImage: {fileID: 7857238819650725882}
+  texturePlaceholder: {fileID: 10904, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!114 &4401935044605162003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -420,7 +421,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 144.59334, y: 0}
+  m_SizeDelta: {x: 200, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7857238819650725883
 CanvasRenderer:
