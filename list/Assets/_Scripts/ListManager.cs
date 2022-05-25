@@ -13,7 +13,7 @@ public class ListManager : MonoBehaviour
     private const string CantFindCatalog = "Cant find catalog";
     
     private static string _folderPath = "C:/";
-    //private string _folderPath = "C:/Users/Piotrek/Desktop/png";
+    private string searchPattern = "*.png";
 
     [SerializeField] private GameObject cellContainer;
     [SerializeField] private Button refreshButton;
@@ -22,12 +22,11 @@ public class ListManager : MonoBehaviour
     [SerializeField] private Cell cellPrefab;
     [SerializeField] private TextMeshProUGUI popupText;
     [SerializeField] private AddPanel addPngPanel;
+    
     private  bool isPathCorrect;
     
     private List<Cell> _cells = new List<Cell>();
-
     private List<string> _filePathList;
-    private DateTime _dateTime;
     
     private void Start()
     {
@@ -52,7 +51,6 @@ public class ListManager : MonoBehaviour
 
     private void GetPathFromInput(string path)
     {
-        //Debug.Log(path);
         _folderPath = path;
         RefreshList();
     }
@@ -67,8 +65,7 @@ public class ListManager : MonoBehaviour
     {
         addPngPanel.gameObject.SetActive(false);
     }
-    
-    
+
     private void RefreshList()
     {
         ResetList();
@@ -93,7 +90,7 @@ public class ListManager : MonoBehaviour
     {
         try
         {
-            _filePathList = Directory.GetFiles(_folderPath, "*.png").ToList();
+            _filePathList = Directory.GetFiles(_folderPath, searchPattern).ToList();
             DisablePopup();
             isPathCorrect = true;
         }
