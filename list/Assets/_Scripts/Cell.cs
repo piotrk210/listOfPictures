@@ -26,7 +26,14 @@ public class Cell : MonoBehaviour
     private Texture LoadTexture(string path)
     {
         Texture2D texture = new Texture2D(40,40);
-        texture.LoadImage(File.ReadAllBytes(path));
+        try
+        {
+            texture.LoadImage(File.ReadAllBytes(path));
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e.Message);
+        }
         return texture;
     }
 
