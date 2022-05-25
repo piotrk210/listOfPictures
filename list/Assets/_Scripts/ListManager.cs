@@ -1,18 +1,21 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Net.NetworkInformation;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ListManager : MonoBehaviour
 {
-    private const string FolderPath = "C:/Users/Piotrek/Desktop/png";
+    private string _folderPath = "C:/";
+    //private string _folderPath = "C:/Users/Piotrek/Desktop/png";
 
     [SerializeField] private GameObject container;
     [SerializeField] private Button refreshButton;
+    [SerializeField] private Button addPngButton;
+    [SerializeField] private TMP_InputField input;
     [SerializeField] private Cell cellPrefab;
+    [SerializeField] private TextMeshProUGUI noItemsText;
     
     private List<Cell> _cells = new List<Cell>();
 
@@ -23,52 +26,73 @@ public class ListManager : MonoBehaviour
     {
         InitList();
         refreshButton.onClick.AddListener(RefreshList);
+        addPngButton.onClick.AddListener(ShowAddingPngPanel);
+        input.onEndEdit.AddListener(GetPathFromInput);
+    }
+
+    private void OnDisable()
+    {
+        input.onEndEdit.RemoveAllListeners();
+        refreshButton.onClick.RemoveAllListeners();
+        addPngButton.onClick.RemoveAllListeners();
+    }
+
+    private void GetPathFromInput(string path)
+    {
+        Debug.Log(path);
+        //convert /
+        // path.Replace("\\", "/");
+        // Debug.Log(path);
+        _folderPath = path;
+        RefreshList();
+    }
+
+    private void ShowAddingPngPanel()
+    {
+        
     }
 
     private void InitList()
     {
         GetImagePathList();
-        
+
+        noItemsText.gameObject.SetActive(_filePathList.Length == 0);
+
         for (int i = 0; i < _filePathList.Length; i++)
         {
             var pictureCell = Instantiate(cellPrefab, container.transform);
             _cells.Add(pictureCell);
-            
-            pictureCell.RawImage.texture = LoadTexture(_filePathList[i]);
-            pictureCell.fileNameText.text = Path.GetFileNameWithoutExtension(_filePathList[i]);
-            _dateTime = Directory.GetCreationTimeUtc(_filePathList[i]).ToLocalTime();
-            pictureCell.creationTimeText.text = CheckIsSingleNumber(_dateTime.Day) + "." + CheckIsSingleNumber(_dateTime.Month) + "." + _dateTime.Year + " " +
-                                                CheckIsSingleNumber(_dateTime.Hour) + ":" + CheckIsSingleNumber(_dateTime.Minute) + ":" + CheckIsSingleNumber(_dateTime.Second);
-            Debug.Log(_dateTime.Date);
+            pictureCell.UpdateCell(_filePathList[i]);
         }
     }
 
     private void RefreshList()
+    {
+        ResetList();
+        InitList();
+    }
+
+    private void GetImagePathList()
+    {
+        try
+        {
+            _filePathList = Directory.GetFiles(_folderPath, "*.png");
+        }
+        catch (Exception e)
+        {
+            ResetList();
+            Debug.Log(e.Message);
+            //cant find catalog
+        }
+    }
+
+    private void ResetList()
     {
         for (int j = 0; j < _cells.Count; j++)
         {
             Destroy(_cells[j].gameObject);
         }
         _cells.Clear();
-        InitList();
     }
-
-    private void GetImagePathList()
-    {
-        _filePathList = Directory.GetFiles(FolderPath, "*.png");
-    }
-
-    private Texture LoadTexture(string path)
-    {
-        Texture2D texture = new Texture2D(40,40);
-        texture.LoadImage(File.ReadAllBytes(path));
-        return texture;
-    }
-
-    private string CheckIsSingleNumber(int number)
-    {
-        if (number < 10) return "0" + number;
-        return number.ToString();
-    }
-
+    
 }

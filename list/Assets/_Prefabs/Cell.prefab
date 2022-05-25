@@ -359,7 +359,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fileNameText: {fileID: 7502317001336581236}
   creationTimeText: {fileID: 4689870363089011515}
-  RawImage: {fileID: 7857238819650725882}
+  rawImage: {fileID: 7857238819650725882}
 --- !u!114 &4401935044605162003
 MonoBehaviour:
   m_ObjectHideFlags: 0
