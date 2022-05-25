@@ -11,6 +11,7 @@ public class AddPanel : MonoBehaviour
     [SerializeField] private TMP_InputField input;
     [SerializeField] private Button submitButton;
     public Action OnAddPng;
+    private string fileFormat = ".png";
     
     private string catalogPath;
 
@@ -32,8 +33,7 @@ public class AddPanel : MonoBehaviour
 
     private void Submit()
     {
-        Debug.Log(catalogPath + "/"+ input.text + ".png");
-        File.Create(catalogPath + "/"+ input.text + ".png");
+        File.Create(catalogPath + "/"+ input.text + fileFormat);
         OnAddPng?.Invoke();
     }
 }
