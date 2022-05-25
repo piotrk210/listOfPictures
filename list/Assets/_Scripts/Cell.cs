@@ -11,6 +11,8 @@ public class Cell : MonoBehaviour
     [SerializeField] private TextMeshProUGUI fileNameText;
     [SerializeField] private TextMeshProUGUI creationTimeText;
     [SerializeField] private RawImage rawImage;
+    [SerializeField] private Texture2D texturePlaceholder;
+    
     private DateTime _dateTime;
 
     public void UpdateCell(string path)
@@ -33,6 +35,7 @@ public class Cell : MonoBehaviour
         catch (Exception e)
         {
             Debug.Log(e.Message);
+            texture = texturePlaceholder;
         }
         return texture;
     }

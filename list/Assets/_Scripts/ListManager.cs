@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,10 +29,13 @@ public class ListManager : MonoBehaviour
     private List<Cell> _cells = new List<Cell>();
     private List<string> _filePathList;
     
+    public const int startingCellNumber = 5;
+    
     private void Start()
     {
-        InitList();
+        UpdateList();
         addPngPanel.InitPanel();
+        InstantiateCells();
         refreshButton.onClick.AddListener(RefreshList);
         addPngButton.onClick.AddListener(EnableAddingPngPanel);
         input.onEndEdit.AddListener(GetPathFromInput);
@@ -69,20 +73,22 @@ public class ListManager : MonoBehaviour
     private void RefreshList()
     {
         ResetList();
-        InitList();
+        UpdateList();
     }
 
-    private void InitList()
+    private void UpdateList()
     {
         GetImagePathList();
 
         if(_filePathList.Count == 0 && isPathCorrect) EnablePopup(NoPngInFile);
 
+        int newCellsToInstantiate = (_filePathList.Count > _cells.Count) ? _filePathList.Count - _cells.Count : 0;
+        if(newCellsToInstantiate > 0) InstantiateCells(newCellsToInstantiate);
+            
         for (int i = 0; i < _filePathList.Count; i++)
         {
-            var pictureCell = Instantiate(cellPrefab, cellContainer.transform);
-            _cells.Add(pictureCell);
-            pictureCell.UpdateCell(_filePathList[i]);
+            _cells[i].UpdateCell(_filePathList[i]);
+            _cells[i].gameObject.SetActive(true);
         }
     }
     
@@ -103,13 +109,13 @@ public class ListManager : MonoBehaviour
             Debug.Log(e.Message);
         }
     }
+
     private void ResetList()
     {
-        for (int j = 0; j < _cells.Count; j++)
+        foreach (var cell in _cells)
         {
-            Destroy(_cells[j].gameObject);
+            cell.gameObject.SetActive(false);;
         }
-        _cells.Clear();
     }
 
     private void EnablePopup(string messeg)
@@ -121,5 +127,16 @@ public class ListManager : MonoBehaviour
     private void DisablePopup()
     {
         popupText.gameObject.SetActive(false);
+    }
+
+
+    private void InstantiateCells(int numberToInstantiate = startingCellNumber)
+    {
+        for (int i = 0; i < numberToInstantiate; i++)
+        {
+            var pictureCell = Instantiate(cellPrefab, cellContainer.transform);
+            pictureCell.gameObject.SetActive(false);
+            _cells.Add(pictureCell);
+        }
     }
 }
