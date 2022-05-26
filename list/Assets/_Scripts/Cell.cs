@@ -6,47 +6,51 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Cell : MonoBehaviour
+namespace UI
 {
-    [SerializeField] private TextMeshProUGUI fileNameText;
-    [SerializeField] private TextMeshProUGUI creationTimeText;
-    [SerializeField] private RawImage rawImage;
-    [SerializeField] private Texture2D texturePlaceholder;
-
-    private int textureWidth = 40;
-    private int textureHight = 40;
-    
-    private DateTime _dateTime;
-
-    public void UpdateCell(string path)
+    public class Cell : MonoBehaviour
     {
-        rawImage.texture = LoadTexture(path);
-        fileNameText.text = Path.GetFileNameWithoutExtension(path);
-        _dateTime = Directory.GetCreationTimeUtc(path).ToLocalTime();
-        creationTimeText.text = CheckIsSingleNumber(_dateTime.Day) + "." + CheckIsSingleNumber(_dateTime.Month) + "." + _dateTime.Year + " " +
-                                            CheckIsSingleNumber(_dateTime.Hour) + ":" + CheckIsSingleNumber(_dateTime.Minute) + ":" + CheckIsSingleNumber(_dateTime.Second);
-    }
+        [SerializeField] private TextMeshProUGUI fileNameText;
+        [SerializeField] private TextMeshProUGUI creationTimeText;
+        [SerializeField] private RawImage rawImage;
+        [SerializeField] private Texture2D texturePlaceholder;
+
+        private int textureWidth = 40;
+        private int textureHight = 40;
     
-    
-    private Texture LoadTexture(string path)
-    {
-        Texture2D texture = new Texture2D(textureWidth,textureHight);
-        try
+        private DateTime _dateTime;
+
+        public void UpdateCell(string path)
         {
-            texture.LoadImage(File.ReadAllBytes(path));
+            rawImage.texture = LoadTexture(path);
+            fileNameText.text = Path.GetFileNameWithoutExtension(path);
+            _dateTime = Directory.GetCreationTimeUtc(path).ToLocalTime();
+            creationTimeText.text = CheckIsSingleNumber(_dateTime.Day) + "." + CheckIsSingleNumber(_dateTime.Month) + "." + _dateTime.Year + " " +
+                                    CheckIsSingleNumber(_dateTime.Hour) + ":" + CheckIsSingleNumber(_dateTime.Minute) + ":" + CheckIsSingleNumber(_dateTime.Second);
         }
-        catch (Exception e)
+    
+    
+        private Texture LoadTexture(string path)
         {
-            Debug.Log(e.Message);
-            texture = texturePlaceholder;
+            Texture2D texture = new Texture2D(textureWidth,textureHight);
+            try
+            {
+                texture.LoadImage(File.ReadAllBytes(path));
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e.Message);
+                texture = texturePlaceholder;
+            }
+            return texture;
         }
-        return texture;
-    }
 
-    private string CheckIsSingleNumber(int number)
-    {
-        if (number < 10) return "0" + number;
-        return number.ToString();
-    }
+        private string CheckIsSingleNumber(int number)
+        {
+            if (number < 10) return "0" + number;
+            return number.ToString();
+        }
 
+    }
+    
 }

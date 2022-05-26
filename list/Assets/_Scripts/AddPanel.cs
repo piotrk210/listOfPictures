@@ -7,35 +7,39 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AddPanel : MonoBehaviour
+namespace UI
 {
-    [SerializeField] private TMP_InputField input;
-    [SerializeField] private Button submitButton;
-    public Action OnAddPng;
+    public class AddPanel : MonoBehaviour
+    {
+        [SerializeField] private TMP_InputField input;
+        [SerializeField] private Button submitButton;
+        public Action OnAddPng;
 
     
-    private string catalogPath;
+        private string catalogPath;
 
-    public void InitPanel()
-    {
-        submitButton.onClick.AddListener(Submit);
-    }
+        public void InitPanel()
+        {
+            submitButton.onClick.AddListener(Submit);
+        }
 
-    public void DeinitPanel()
-    {
-        submitButton.onClick.RemoveAllListeners();
-    }
+        public void DeinitPanel()
+        {
+            submitButton.onClick.RemoveAllListeners();
+        }
 
-    public void LoadCatalogPath(string path)
-    {
-        catalogPath = path;
-    }
+        public void LoadCatalogPath(string path)
+        {
+            catalogPath = path;
+        }
     
 
-    private void Submit()
-    {
-        var fileStream = File.Create(catalogPath + "/"+ input.text + Constants.FileFormat);
-        fileStream.Close();
-        OnAddPng?.Invoke();
+        private void Submit()
+        {
+            var fileStream = File.Create(catalogPath + "/"+ input.text + Constants.FileFormat);
+            fileStream.Close();
+            OnAddPng?.Invoke();
+        }
     }
+    
 }
