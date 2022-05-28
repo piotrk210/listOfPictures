@@ -60,7 +60,7 @@ namespace UI
         private void EnableAddingPngPanel()
         {
             if(addPngButton.isActiveAndEnabled) addPngPanel.gameObject.SetActive(true);
-            addPngPanel.LoadCatalogPath(_folderPath);
+            addPngPanel.LoadCatalogPath(_folderPath, isPathCorrect);
         }
     
         private void DisableAddingPngPanel()

@@ -17,6 +17,7 @@ namespace UI
 
     
         private string catalogPath;
+        private bool isPathCorretc;
 
         public void InitPanel()
         {
@@ -28,16 +29,20 @@ namespace UI
             submitButton.onClick.RemoveAllListeners();
         }
 
-        public void LoadCatalogPath(string path)
+        public void LoadCatalogPath(string path, bool isPathCorretc)
         {
             catalogPath = path;
+            this.isPathCorretc = isPathCorretc;
         }
     
 
         private void Submit()
         {
-            var fileStream = File.Create(catalogPath + "/"+ input.text + Constants.FileFormat);
-            fileStream.Close();
+            if(isPathCorretc && input.text != "")
+            {
+                var fileStream = File.Create(catalogPath + "/"+ input.text + Constants.FileFormat);
+                fileStream.Close();
+            }
             OnAddPng?.Invoke();
         }
     }
