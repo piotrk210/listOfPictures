@@ -17,22 +17,32 @@ namespace UI
 
         private int textureWidth = 40;
         private int textureHight = 40;
-    
-        private DateTime _dateTime;
+
+        private DateTime creationTime;
+        private TimeSpan timeSpan;
+        public string currentPath = "";
+
 
         public void UpdateCell(string path)
         {
-            rawImage.texture = LoadTexture(path);
+            if (string.Equals(currentPath, path) &&
+                DateTime.Equals(creationTime, Directory.GetCreationTimeUtc(path).ToLocalTime())) return;
+
+            currentPath = path;
             fileNameText.text = Path.GetFileNameWithoutExtension(path);
-            _dateTime = Directory.GetCreationTimeUtc(path).ToLocalTime();
-            creationTimeText.text = CheckIsSingleNumber(_dateTime.Day) + "." + CheckIsSingleNumber(_dateTime.Month) + "." + _dateTime.Year + " " +
-                                    CheckIsSingleNumber(_dateTime.Hour) + ":" + CheckIsSingleNumber(_dateTime.Minute) + ":" + CheckIsSingleNumber(_dateTime.Second);
+            creationTime = Directory.GetCreationTimeUtc(path);
+            timeSpan = DateTime.Now.Subtract(creationTime);
+            creationTimeText.text = timeSpan.ToString();
         }
-    
-    
-        private Texture LoadTexture(string path)
+
+
+        public void LoadTexture(string path)
         {
-            Texture2D texture = new Texture2D(textureWidth,textureHight);
+            if (string.Equals(currentPath, path) &&
+                DateTime.Equals(creationTime, Directory.GetCreationTimeUtc(path).ToLocalTime())) return;
+
+
+            Texture2D texture = new Texture2D(textureWidth, textureHight);
             try
             {
                 texture.LoadImage(File.ReadAllBytes(path));
@@ -42,15 +52,8 @@ namespace UI
                 Debug.Log(e.Message);
                 texture = texturePlaceholder;
             }
-            return texture;
-        }
 
-        private string CheckIsSingleNumber(int number)
-        {
-            if (number < 10) return "0" + number;
-            return number.ToString();
+            rawImage.texture = texture;
         }
-
     }
-    
 }

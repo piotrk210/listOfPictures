@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -27,7 +28,7 @@ namespace UI
         private List<Cell> _cells = new List<Cell>();
         private List<string> _filePathList = new List<string>();
         
-        public int startingCellNumber = 5;
+        public int startingCellNumber = 20;
         
         private void Start()
         {
@@ -37,8 +38,7 @@ namespace UI
             refreshButton.onClick.AddListener(RefreshList);
             addPngButton.onClick.AddListener(EnableAddingPngPanel);
             input.onEndEdit.AddListener(GetPathFromInput);
-            addPngPanel.OnAddPng += RefreshList;
-            addPngPanel.OnAddPng += DisableAddingPngPanel;
+            addPngPanel.OnAddPng += AddNewPngToList;
         }
     
         private void OnDisable()
@@ -47,12 +47,12 @@ namespace UI
             input.onEndEdit.RemoveAllListeners();
             refreshButton.onClick.RemoveAllListeners();
             addPngButton.onClick.RemoveAllListeners();
-            addPngPanel.OnAddPng -= RefreshList;
-            addPngPanel.OnAddPng -= DisableAddingPngPanel;
+            addPngPanel.OnAddPng -= AddNewPngToList;
         }
     
         private void GetPathFromInput(string path)
         {
+            if(string.Equals(_folderPath, path)) return;
             _folderPath = path;
             RefreshList();
         }
@@ -62,15 +62,16 @@ namespace UI
             if(addPngButton.isActiveAndEnabled) addPngPanel.gameObject.SetActive(true);
             addPngPanel.LoadCatalogPath(_folderPath, isPathCorrect);
         }
-    
-        private void DisableAddingPngPanel()
-        {
-            addPngPanel.gameObject.SetActive(false);
-        }
-    
+
         private void RefreshList()
         {
             ResetList();
+            UpdateList();
+        }
+        
+        private void AddNewPngToList(string pathOfNewPng)
+        {
+            _filePathList.Add(pathOfNewPng);
             UpdateList();
         }
     
@@ -82,11 +83,20 @@ namespace UI
     
             int newCellsToInstantiate = (_filePathList.Count > _cells.Count) ? _filePathList.Count - _cells.Count : 0;
             if(newCellsToInstantiate > 0) InstantiateCells(newCellsToInstantiate);
-                
+
+
+            StartCoroutine(LoadCell());
+
+        }
+
+        private IEnumerator LoadCell()
+        {
             for (int i = 0; i < _filePathList.Count; i++)
             {
-                _cells[i].UpdateCell(_filePathList[i]);
                 _cells[i].gameObject.SetActive(true);
+                _cells[i].UpdateCell(_filePathList[i]);
+                _cells[i].LoadTexture(_filePathList[i]);
+                yield return null;
             }
         }
         

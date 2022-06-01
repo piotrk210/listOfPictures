@@ -13,7 +13,7 @@ namespace UI
     {
         [SerializeField] private TMP_InputField input;
         [SerializeField] private Button submitButton;
-        public Action OnAddPng;
+        public Action<string> OnAddPng;
 
     
         private string catalogPath;
@@ -42,8 +42,10 @@ namespace UI
             {
                 var fileStream = File.Create(catalogPath + "/"+ input.text + Constants.FileFormat);
                 fileStream.Close();
+                OnAddPng?.Invoke(fileStream.Name);
             }
-            OnAddPng?.Invoke();
+            gameObject.SetActive(false);
+            
         }
     }
     
